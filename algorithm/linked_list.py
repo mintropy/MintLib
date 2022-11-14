@@ -1,46 +1,55 @@
 """Linked List
-Double Linked List
-- 데이터의 주소와 노드가 한 줄로 연결된 구조
-- 연결 구조에 따라 singly linked list, doubly linked list, circular linked list 등으로 구분
-
-attributes
-head, tail : 가장 앞, 뒤의 노드
-node_count : 노드의 갯수
-
-methods (python list method 참조)
-append : 삽입
-pop : tkrwp
+추상적 자료형 리스트 구현
 """
 
-from typing import Union
+from typing import Optional, Union, List, Tuple
+
+Seq = Union[None, int, List[int], Tuple[int]] 
 
 
 class Node:
-    def __init__(self, data) -> None:
-        self.data = data
-        self.before_node = None
+    def __init__(self, value: int) -> None:
+        self.value = value
         self.next_node = None
 
 
-class DoublyLinkedList:
-    def __init__(self) -> None:
-        self.head: Union[None, Node] = None
-        self.tail = None
-        self.node_count: int = 0
+class LinkedList:
+    def __init__(self, seq: Union[None, List[int], Tuple[int]]) -> None:
+        self.head: Optional[Node] = None
+        self.length: int = 0
+        if seq is not None:
+            self.append(seq)
 
-    def append(self, node: Node) -> None:
+    def get_list(self) -> list[int]:
+        linked_list: list[int] = []
+        node: Optional[Node] = self.head
+        while node is not None:
+            linked_list.append(node.value)
+            node= node.next_node
+        return linked_list
+
+    def append(self, seq: Union[int, List[int], Tuple[int]]) -> None:
         if self.head is None:
-            self.head = node
-            self.tail = node
-            return
-        node.before_node = self.tail
-        self.tail.next_node = node
-        self.tail = node
-        self.node_count += 1
+            self.head = Node(seq[0])
+        node = self.head
+        while node.next_node is not None:
+            node = node.next_node
+        for x in seq[1:]:
+            node.next_node = Node(x)
+            node = node.next_node
+        self.length += len(seq)
 
-    def add(self, node: Node, before_node: Node):
-        pass
+    def add(self, before_node_value: int, new_value: int) -> None:
+        node: Optional[Node] = self.head
+        while node is None:
+            if node.value == before_node_value:
+                next_node = node.next_node
+                node.next_node = Node(new_value)
+                node.next_node.next_node= next_node
+                return
+            node = node.next_node
+        raise Exception(f"before node value : {before_node_value} does not exist")
 
 
 if __name__ == "__main__":
-    linked_list = DoublyLinkedList()
+    linked_list = LinkedList()
