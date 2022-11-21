@@ -4,7 +4,7 @@
 
 from typing import Optional, Union, List, Tuple
 
-Seq = Union[None, int, List[int], Tuple[int]] 
+Seq = Union[None, int, List[int], Tuple[int]]
 
 
 class Node:
@@ -25,7 +25,7 @@ class LinkedList:
         node: Optional[Node] = self.head
         while node is not None:
             linked_list.append(node.value)
-            node= node.next_node
+            node = node.next_node
         return linked_list
 
     def append(self, seq: Union[int, List[int], Tuple[int]]) -> None:
@@ -41,14 +41,35 @@ class LinkedList:
 
     def add(self, before_node_value: int, new_value: int) -> None:
         node: Optional[Node] = self.head
-        while node is None:
+        while node is not None:
             if node.value == before_node_value:
                 next_node = node.next_node
                 node.next_node = Node(new_value)
-                node.next_node.next_node= next_node
+                node.next_node.next_node = next_node
                 return
             node = node.next_node
         raise Exception(f"before node value : {before_node_value} does not exist")
+
+    def update(self, node_value: int, new_node_value: int) -> None:
+        node: Optional[Node] = self.head
+        while node is not None:
+            if node.value == node_value:
+                node.value = new_node_value
+                return
+        raise Exception(f"node vale : {node_value} dose not exist")
+
+    def delete(self, node_value: int) -> None:
+        node: Optional[None] = self.head
+        if node is not None and node.value == node_value:
+            self.head = node.next_node
+            return
+        while node is not None:
+            if node.next_node is None:
+                node = node.next_node
+            elif node.next_node.value == node_value:
+                node.next_node = node.next_node.next_node
+                return
+        raise Exception(f"node value : {node_value} does not exists")
 
 
 if __name__ == "__main__":
